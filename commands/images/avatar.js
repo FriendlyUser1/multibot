@@ -113,7 +113,7 @@ module.exports = {
 	run: async (client, interaction, args) => {
 		let io = interaction.options,
 			avoptions = {
-				format: io.getString("format") ? io.getString("format") : "png",
+				format: io.getString("format") && !io.getString("command") ? io.getString("format") : "png",
 				size: io.get("size") ? io.get("size").value : 1024,
 			},
 			targetAvatar = io.get("user")
