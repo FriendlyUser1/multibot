@@ -1,5 +1,5 @@
 const DIG = require("discord-image-generation");
-const { MessageAttachment } = require("discord.js")
+const { MessageAttachment } = require("discord.js");
 module.exports = {
 	name: "avatar",
 	description: "All the avatar image commands!",
@@ -7,19 +7,21 @@ module.exports = {
 		{
 			name: "format",
 			type: "STRING",
-			description: "The format of the image (not compatible with 'command' option), default png",
+			description:
+				"The format of the image (not compatible with 'command' option), default png",
 			required: false,
 			choices: [
 				{ name: "webp", value: "webp" },
 				{ name: "png", value: "png" },
 				{ name: "jpg", value: "jpg" },
 				{ name: "jpeg", value: "jpeg" },
-			]
+			],
 		},
 		{
 			name: "size",
 			type: "INTEGER",
-			description: "The size of the image (not compatible with 'command' option), default 1024",
+			description:
+				"The size of the image (not compatible with 'command' option), default 1024",
 			required: false,
 			choices: [
 				{ name: "16", value: 16 },
@@ -35,7 +37,7 @@ module.exports = {
 				{ name: "1024", value: 1024 },
 				{ name: "2048", value: 2048 },
 				{ name: "4096", value: 4096 },
-			]
+			],
 		},
 		{
 			name: "command",
@@ -45,66 +47,95 @@ module.exports = {
 			choices: [
 				// filters
 				{
-					name: "blur", value: "new DIG.Blur()"
+					name: "blur",
+					value: "new DIG.Blur()",
 				},
 				{
-					name: "gay", value: "new DIG.Gay()"
+					name: "gay",
+					value: "new DIG.Gay()",
 				},
 				{
-					name: "greyscale", value: "new DIG.Greyscale()"
+					name: "greyscale",
+					value: "new DIG.Greyscale()",
 				},
 				{
-					name: "invert", value: "new DIG.Invert()"
+					name: "invert",
+					value: "new DIG.Invert()",
 				},
 				{
-					name: "sepia", value: "new DIG.Sepia()"
+					name: "sepia",
+					value: "new DIG.Sepia()",
 				},
 				// gifs
 				{
-					name: "triggered", value: "new DIG.Triggered()"
+					name: "triggered",
+					value: "new DIG.Triggered()",
 				},
 				// montage
 				{
-					name: "advert", value: "new DIG.Ad()"
+					name: "advert",
+					value: "new DIG.Ad()",
 				},
 				{
-					name: "affect", value: "new DIG.Affect()"
+					name: "affect",
+					value: "new DIG.Affect()",
 				},
 				{
-					name: "beautiful", value: "new DIG.Beautiful()"
+					name: "beautiful",
+					value: "new DIG.Beautiful()",
 				},
 				{
-					name: "bobross", value: "new DIG.Bobross()"
+					name: "bobross",
+					value: "new DIG.Bobross()",
 				},
 				{
-					name: "confusedstonk", value: "new DIG.ConfusedStonk()"
+					name: "confusedstonk",
+					value: "new DIG.ConfusedStonk()",
 				},
 				{
-					name: "delete", value: "new DIG.Delete()"
+					name: "delete",
+					value: "new DIG.Delete()",
 				},
 				{
-					name: "notstonk", value: "new DIG.NotStonk()"
+					name: "notstonk",
+					value: "new DIG.NotStonk()",
 				},
-			]
-		}, {
+			],
+		},
+		{
 			name: "user",
 			type: "USER",
-			description: "The user with the avatar you want to use (default is yours)",
+			description:
+				"The user with the avatar you want to use (default is yours)",
 			required: false,
-		}],
+		},
+	],
 	run: async (client, interaction, args) => {
-		let avoptions = { format: interaction.options.getString("format") ? interaction.options.getString("format") : "png", size: interaction.options.get("size") ? interaction.options.get("size").value : 1024 }
+		let io = interaction.options,
+			avoptions = {
+				format: io.getString("format") ? io.getString("format") : "png",
+				size: io.get("size") ? io.get("size").value : 1024,
+			},
+			targetAvatar = io.get("user")
+				? io.get("user").member.displayAvatarURL(avoptions)
+				: interaction.member.displayAvatarURL(avoptions);
 
-		var targetAvatar = interaction.options.get("user") ? interaction.options.get("user").member.displayAvatarURL(avoptions) : interaction.member.displayAvatarURL(avoptions)
-
-		if (!interaction.options.getString("command")) {
-			let attach = new MessageAttachment(targetAvatar, `avatar.${avoptions.format}`)
-			return interaction.followUp({ files: [attach] })
+		if (!io.getString("command")) {
+			let attach = new MessageAttachment(
+				targetAvatar,
+				`avatar.${avoptions.format}`
+			);
+			return interaction.followUp({ files: [attach] });
 		}
 
-		eval(interaction.options.get("command").value).getImage(targetAvatar).then(image => {
-			let attach = interaction.options.get("command").value != "new DIG.Triggered()" ? new MessageAttachment(image, "avataredited.png") : new MessageAttachment(image, "avataredited.gif")
-			interaction.followUp({ files: [attach] })
-		})
-	}
-}
+		eval(io.get("command").value)
+			.getImage(targetAvatar)
+			.then((image) => {
+				let attach =
+					io.get("command").value != "new DIG.Triggered()"
+						? new MessageAttachment(image, "avataredited.png")
+						: new MessageAttachment(image, "avataredited.gif");
+				interaction.followUp({ files: [attach] });
+			});
+	},
+};
