@@ -8,7 +8,7 @@ module.exports = {
 			name: "format",
 			type: "STRING",
 			description:
-				"The format of the image (not compatible with 'command' option), default png",
+				"The format of the image, default png, not compatible with 'command' option",
 			required: false,
 			choices: [
 				{ name: "webp", value: "webp" },
@@ -21,7 +21,7 @@ module.exports = {
 			name: "size",
 			type: "INTEGER",
 			description:
-				"The size of the image (not compatible with 'command' option), default 1024",
+				"The size of the image, default 1024",
 			required: false,
 			choices: [
 				{ name: "16", value: 16 },
@@ -106,7 +106,7 @@ module.exports = {
 			name: "user",
 			type: "USER",
 			description:
-				"The user with the avatar you want to use (default is yours)",
+				"The user with the avatar you want to use, default self",
 			required: false,
 		},
 	],
