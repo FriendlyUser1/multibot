@@ -1,7 +1,7 @@
 const { PermissionsBitField } = require("discord.js");
 module.exports = {
 	name: "nuke",
-	description: "Nukes the current channel (admin perms needed)",
+	description: "Nukes the current channel (admin only)",
 	run: async (client, interaction, args) => {
 		if (
 			!interaction.member.permissions.has(
