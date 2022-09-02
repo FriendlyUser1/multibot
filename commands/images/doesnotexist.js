@@ -19,7 +19,7 @@ module.exports = {
 			return interaction.followUp({
 				embeds: [
 					{
-						timestamp: Date.now(),
+						timestamp: new Date().toISOString(),
 						image: { url: "attachment://doesnotexist.png" },
 						title: "This person doesn't exist",
 						color: require("../../ranCol").lightCol(),
@@ -37,7 +37,7 @@ module.exports = {
 			return interaction.followUp({
 				embeds: [
 					{
-						color: "#cf484a",
+						color: 13584458,
 						description: "Whoops! There was an error.",
 					},
 				],

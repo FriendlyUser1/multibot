@@ -1,10 +1,11 @@
+const { ApplicationCommandOptionType } = require("discord.js");
 module.exports = {
 	name: "sarcastic",
 	description: "Makes your message sArCaStIc",
 	options: [
 		{
 			name: "text",
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			description: "The text to be made sArCaStIc",
 			required: true,
 		},
@@ -20,7 +21,7 @@ module.exports = {
 			embeds: [
 				{
 					color: require("../../ranCol").lightCol(),
-					timestamp: Date.now(),
+					timestamp: new Date().toISOString(),
 					description: newS,
 				},
 			],

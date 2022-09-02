@@ -1,13 +1,14 @@
+const { ApplicationCommandOptionType } = require("discord.js");
 module.exports = {
 	name: "8ball",
 	description: "Gain the wisdom of the mighty 8 ball",
 	options: [
 		{
 			name: "question",
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			description: "What you want to ask the 8ball",
 			required: true,
-		}
+		},
 	],
 	run: async (client, interaction, args) => {
 		var responses = [
@@ -37,14 +38,21 @@ module.exports = {
 		];
 
 		return interaction.followUp({
-			embeds: [{
-				color: require("../../ranCol").lightCol(),
-				title: "Magic 8-ball 🎱",
-				fields: [{
-					name: `Question: ${interaction.options.getString("question")}`,
-					value: `**Answer: ${responses[Math.floor(Math.random() * responses.length)]}**`
-				}], timestamp: Date.now()
-			}]
+			embeds: [
+				{
+					color: require("../../ranCol").lightCol(),
+					title: "Magic 8-ball 🎱",
+					fields: [
+						{
+							name: `Question: ${interaction.options.getString("question")}`,
+							value: `**Answer: ${
+								responses[Math.floor(Math.random() * responses.length)]
+							}**`,
+						},
+					],
+					timestamp: new Date().toISOString(),
+				},
+			],
 		});
 	},
 };

@@ -1,3 +1,4 @@
+const { EmbedBuilder } = require("discord.js");
 const Neko = require("neko-love");
 const nekoclient = new Neko.Client();
 module.exports = {
@@ -8,18 +9,24 @@ module.exports = {
 			.cry()
 			.then((url) => {
 				interaction.followUp({
-					embeds:
-						[{
-							color: require("../../ranCol").lightCol(), image: { url: url.toString() }, timestamp: Date.now()
-						}]
-				})
+					embeds: [
+						{
+							color: require("../../ranCol").lightCol(),
+							image: { url: url },
+							timestamp: new Date().toISOString(),
+						},
+					],
+				});
 			})
 			.catch((err) => {
 				console.log(err);
 				interaction.followUp({
-					embeds: [{
-						color: "#cf484a", description: "Whoops! There was an error."
-					}],
+					embeds: [
+						{
+							color: 13584458,
+							description: "Whoops! There was an error.",
+						},
+					],
 				});
 			});
 	},

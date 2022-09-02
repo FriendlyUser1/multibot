@@ -1,12 +1,12 @@
 const { readdirSync } = require("fs");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 module.exports = {
 	name: "help",
 	description: "Shows all available commands",
 	options: [
 		{
 			name: "command",
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			description: "The command you want to see information for",
 			required: false,
 		},
@@ -40,14 +40,14 @@ module.exports = {
 				}
 			});
 
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setTitle("Here are all of my commands:")
 				.addFields(categories)
 				.setDescription(
 					`Use /help with a command name to get more info on a command.`
 				)
 				.setTimestamp()
-				.setColor("GREEN");
+				.setColor(5763719);
 			return interaction.followUp({ embeds: [embed] });
 		} else {
 			let givenCommand = interaction.options.getString("command");
@@ -55,7 +55,7 @@ module.exports = {
 				return interaction.followUp({
 					embeds: [
 						{
-							color: "#cf484a",
+							color: 13584458,
 							description: "Whoops! That isn't a valid command.",
 						},
 					],
@@ -64,7 +64,7 @@ module.exports = {
 
 			const command = client.slashCommands.get(givenCommand);
 
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setTitle(
 					command.name ? `\`${command.name}\`` : "No name for this command."
 				)

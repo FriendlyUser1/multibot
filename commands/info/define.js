@@ -1,5 +1,5 @@
 const request = require("request");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 
 module.exports = {
 	name: "define",
@@ -7,7 +7,7 @@ module.exports = {
 	options: [
 		{
 			name: "word",
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			description: "The work you want to be defined",
 			required: true,
 		},
@@ -112,7 +112,7 @@ module.exports = {
 					return interaction.followUp({
 						embeds: [
 							{
-								color: "#cf484a",
+								color: 13584458,
 								description: "Whoops! There was an error.",
 							},
 						],
@@ -123,16 +123,16 @@ module.exports = {
 					return interaction.followUp({
 						embeds: [
 							{
-								color: "#cf484a",
+								color: 13584458,
 								title: ":(",
 								description: body.title,
-								timestamp: Date.now(),
+								timestamp: new Date().toISOString(),
 							},
 						],
 					});
 				}
 
-				var embedd = new MessageEmbed()
+				var embedd = new EmbedBuilder()
 					.setTitle(capitaliseFirstLetter(body[0].word))
 					.setDescription(
 						`

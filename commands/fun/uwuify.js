@@ -1,10 +1,11 @@
+const { ApplicationCommandOptionType } = require("discord.js");
 module.exports = {
 	name: "uwuify",
 	description: "UwUifies your message!",
 	options: [
 		{
 			name: "text",
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			description: "The text to become uwuified",
 			required: true,
 		},
@@ -18,7 +19,7 @@ module.exports = {
 			embeds: [
 				{
 					color: require("../../ranCol").lightCol(),
-					timestamp: Date.now(),
+					timestamp: new Date().toISOString(),
 					description: s,
 				},
 			],

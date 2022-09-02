@@ -1,12 +1,15 @@
 const DIG = require("discord-image-generation");
-const { MessageAttachment } = require("discord.js");
+const {
+	AttachmentBuilder,
+	ApplicationCommandOptionType,
+} = require("discord.js");
 module.exports = {
 	name: "avatar",
 	description: "All the avatar image commands!",
 	options: [
 		{
 			name: "format",
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			description:
 				"The format of the image, default png, not compatible with 'command' option",
 			required: false,
@@ -19,21 +22,16 @@ module.exports = {
 		},
 		{
 			name: "size",
-			type: "INTEGER",
-			description:
-				"The size of the image, default 1024",
+			type: ApplicationCommandOptionType.Integer,
+			description: "The size of the image, default 1024",
 			required: false,
 			choices: [
 				{ name: "16", value: 16 },
 				{ name: "32", value: 32 },
-				{ name: "56", value: 56 },
 				{ name: "64", value: 64 },
-				{ name: "96", value: 96 },
 				{ name: "128", value: 128 },
 				{ name: "256", value: 256 },
-				{ name: "300", value: 300 },
 				{ name: "512", value: 512 },
-				{ name: "600", value: 600 },
 				{ name: "1024", value: 1024 },
 				{ name: "2048", value: 2048 },
 				{ name: "4096", value: 4096 },
@@ -41,7 +39,7 @@ module.exports = {
 		},
 		{
 			name: "command",
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			description: "The image command you want to use",
 			required: false,
 			choices: [
@@ -104,38 +102,41 @@ module.exports = {
 		},
 		{
 			name: "user",
-			type: "USER",
-			description:
-				"The user with the avatar you want to use, default self",
+			type: ApplicationCommandOptionType.User,
+			description: "The user with the avatar you want to use, default self",
 			required: false,
 		},
 	],
 	run: async (client, interaction, args) => {
 		let io = interaction.options,
 			avoptions = {
-				format: io.getString("format") && !io.getString("command") ? io.getString("format") : "png",
+				format:
+					io.getString("format") && !io.getString("command")
+						? io.getString("format")
+						: "png",
 				size: io.get("size") ? io.get("size").value : 1024,
+				forceStatic: true,
+				dynamic: false,
 			},
 			targetAvatar = io.get("user")
 				? io.get("user").member.displayAvatarURL(avoptions)
 				: interaction.member.displayAvatarURL(avoptions);
 
 		if (!io.getString("command")) {
-			let attach = new MessageAttachment(
-				targetAvatar,
-				`avatar.${avoptions.format}`
-			);
+			let attach = new AttachmentBuilder(targetAvatar, {
+				name: `avatar.${avoptions.format}`,
+			});
 			return interaction.followUp({ files: [attach] });
 		}
 
 		eval(io.get("command").value)
-			.getImage(targetAvatar)
+			.getImage(targetAvatar.replace("webp", "png"))
 			.then((image) => {
 				let attach =
 					io.get("command").value != "new DIG.Triggered()"
-						? new MessageAttachment(image, "avataredited.png")
-						: new MessageAttachment(image, "avataredited.gif");
-				interaction.followUp({ files: [attach] });
+						? new AttachmentBuilder(image, { name: "avataredited.png" })
+						: new AttachmentBuilder(image, { name: "avataredited.gif" });
+				return interaction.followUp({ files: [attach] });
 			});
 	},
 };

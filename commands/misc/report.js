@@ -1,13 +1,14 @@
+const { ApplicationCommandOptionType } = require("discord.js");
 module.exports = {
 	name: "report",
 	description: "Report bugs/glitches in the bot",
 	options: [
 		{
 			name: "report",
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			description: "The bug you want to report",
-			required: true
-		}
+			required: true,
+		},
 	],
 	run: async (client, interaction, args) => {
 		var owner = client.users.cache.find(
@@ -15,10 +16,21 @@ module.exports = {
 		);
 
 		owner.send(
-			`**New report from ${interaction.user.tag} (id: ${interaction.user.id
-			})\nin server ${interaction.guild.name} (id: ${interaction.guild.id
-			})**\nReport: ${interaction.options.getString("report")}`
+			`**New report from "${interaction.user.tag}" (id: ${
+				interaction.user.id
+			})\nin server "${interaction.guild.name}" (id: ${
+				interaction.guild.id
+			})**\nReport: "${interaction.options.getString("report")}"`
 		);
-		interaction.followUp({ embeds: [{ title: "Your report has been sent!", description: "Thank you for sending a report :)", color: require("../../ranCol").lightCol(), timestamp: Date.now() }] });
+		interaction.followUp({
+			embeds: [
+				{
+					title: "Your report has been sent!",
+					description: "Thank you for sending a report :)",
+					color: require("../../ranCol").lightCol(),
+					timestamp: new Date().toISOString(),
+				},
+			],
+		});
 	},
 };

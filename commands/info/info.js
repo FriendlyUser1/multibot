@@ -18,12 +18,12 @@ module.exports = {
 					description: `
 Hi! I'm multibot, nice to meet you.
 I was created by Chihiro Fujisaki#0449
-with the \`discord.js v13\` library
+with the \`discord.js v14\` library
 and currently I have ${commands.length} commands.
 `,
 					title: "About me :)",
 					color: require("../../ranCol").lightCol(),
-					timestamp: Date.now(),
+					timestamp: new Date().toISOString(),
 				},
 			],
 		});
