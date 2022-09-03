@@ -1,4 +1,4 @@
-const fs = require("fs");
+const { MongoClient, ServerApiVersion } = require("mongodb");
 const {
 	ApplicationCommandOptionType,
 	PermissionsBitField,
@@ -51,13 +51,30 @@ module.exports = {
 			});
 		}
 
-		let content = JSON.parse(fs.readFileSync("./welcomeroles.json", "utf8"));
+		const mongoclient = new MongoClient(
+			`mongodb+srv://${process.env.MONGOUSER}:${process.env.MONGOPASS}@multibot.x4ns9q3.mongodb.net/?retryWrites=true&w=majority`,
+			{
+				useNewUrlParser: true,
+				useUnifiedTopology: true,
+				serverApi: ServerApiVersion.v1,
+			}
+		);
 
-		content[interaction.guild.id] = io.getBoolean("clear")
-			? null
-			: interaction.options.getString("role_id");
-
-		fs.writeFileSync("./welcomeroles.json", JSON.stringify(content, null, 2));
+		mongoclient.connect(async (err) => {
+			const collection = mongoclient.db("multibot").collection("welcomeroles");
+			await collection.updateOne(
+				{ serverid: interaction.guild.id },
+				{
+					$set: {
+						roleid: io.getBoolean("clear")
+							? null
+							: interaction.options.getString("role_id"),
+					},
+				},
+				{ upsert: true }
+			);
+			mongoclient.close();
+		});
 
 		if (io.getBoolean("clear"))
 			return interaction.followUp({

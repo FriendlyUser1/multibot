@@ -28,6 +28,7 @@
 		"discord.js": "^14.3.0",
 		"dotenv": "^16.0.1",
 		"fs": "^0.0.1-security",
+		"mongodb": "^4.9.1",
 		"neko-love": "^2.0.2",
 		"request": "^2.88.2"
 	}
