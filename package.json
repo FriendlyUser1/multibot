@@ -8,7 +8,7 @@
 	},
 	"engines": {
 		"npm": ">=7.0.0",
-		"node": ">=16.0.0"
+		"node": ">=16.9.0"
 	},
 	"repository": {
 		"type": "git",
@@ -25,7 +25,7 @@
 		"ainasepics": "^4.1.0",
 		"discord-image-generation": "^1.4.13",
 		"discord-jokes": "^4.0.0",
-		"discord.js": "^13.6.0",
+		"discord.js": "^14.3.0",
 		"dotenv": "^16.0.1",
 		"fs": "^0.0.1-security",
 		"neko-love": "^2.0.2",

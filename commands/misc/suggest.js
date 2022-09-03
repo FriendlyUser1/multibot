@@ -1,13 +1,14 @@
+const { ApplicationCommandOptionType } = require("discord.js");
 module.exports = {
 	name: "suggest",
 	description: "Suggest a feature to be added to the bot!",
 	options: [
 		{
 			name: "suggestion",
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			description: "The feature you want to suggestion",
-			required: true
-		}
+			required: true,
+		},
 	],
 	run: async (client, interaction, args) => {
 		var owner = client.users.cache.find(
@@ -15,11 +16,21 @@ module.exports = {
 		);
 
 		owner.send(
-			`**New suggestion from ${interaction.user.tag} (id: ${interaction.user.id
-			})\nin server ${interaction.guild.name} (id: ${interaction.guild.id
-			})**\nSuggestion: ${interaction.options.getString("suggestion")}`
+			`**New suggestion from "${interaction.user.tag}" (id: ${
+				interaction.user.id
+			})\nin server "${interaction.guild.name}" (id: ${
+				interaction.guild.id
+			})**\nSuggestion: "${interaction.options.getString("suggestion")}"`
 		);
-		interaction.followUp({ embeds: [{ title: "Your suggestion has been sent!", description: "Thank you for sending a suggestion :)", color: require("../../ranCol").lightCol(), timestamp: Date.now() }] });
-
+		interaction.followUp({
+			embeds: [
+				{
+					title: "Your suggestion has been sent!",
+					description: "Thank you for sending a suggestion :)",
+					color: require("../../ranCol").lightCol(),
+					timestamp: new Date().toISOString(),
+				},
+			],
+		});
 	},
 };

@@ -10,9 +10,12 @@ module.exports = {
 				if (err) {
 					console.log(err);
 					return interaction.followUp({
-						embeds: [{
-							color: "#cf484a", description: "Whoops! There was an error."
-						}]
+						embeds: [
+							{
+								color: 13584458,
+								description: "Whoops! There was an error.",
+							},
+						],
 					});
 				}
 
@@ -21,7 +24,15 @@ module.exports = {
 				foundTopic =
 					body.topics[Math.floor(Math.random() * body.topics.length)];
 
-				return interaction.followUp({ embeds: [{ color: require("../../ranCol").lightCol(), timestamp: Date.now(), description: foundTopic }] });
+				return interaction.followUp({
+					embeds: [
+						{
+							color: require("../../ranCol").lightCol(),
+							timestamp: new Date().toISOString(),
+							description: foundTopic,
+						},
+					],
+				});
 			}
 		);
 	},

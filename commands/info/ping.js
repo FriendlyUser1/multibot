@@ -3,7 +3,13 @@ module.exports = {
 	description: "Replies with 'Pong!'",
 	run: async (client, interaction, args) => {
 		return interaction.followUp({
-			embeds: [{ color: "#94e4bc", description: `**Pong - ${client.ws.ping}**ms!`, timestamp: Date.now() }],
+			embeds: [
+				{
+					color: 9757884,
+					description: `**Pong - ${client.ws.ping}**ms!`,
+					timestamp: new Date().toISOString(),
+				},
+			],
 		});
 	},
 };

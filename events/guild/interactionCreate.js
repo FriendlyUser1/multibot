@@ -1,14 +1,15 @@
+const { InteractionType } = require("discord.js");
 module.exports = async (Discord, client, interaction) => {
 	if (!interaction.inGuild()) return;
-	if (interaction.isCommand()) {
+	if (interaction.type === InteractionType.ApplicationCommand) {
 		await interaction.deferReply();
 
-		const cmd = client.slashCommands.get(interaction.commandName)
+		const cmd = client.slashCommands.get(interaction.commandName);
 		if (!cmd)
 			return interaction.followUp({
 				embeds: [
 					{
-						color: "#cf484a",
+						color: 13584458,
 						description: "There was an error - please try again! ",
 					},
 				],

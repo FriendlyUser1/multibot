@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 require("dotenv").config();
 
 const client = new Client({
-	intents: 98045,
+	intents: 98047,
 	disableMentions: "everyone",
 });
 module.exports = client;

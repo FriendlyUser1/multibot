@@ -9,7 +9,7 @@ module.exports = {
 					{
 						color: require("../../ranCol").lightCol(),
 						description: "**" + joke + "**",
-						timestamp: Date.now(),
+						timestamp: new Date().toISOString(),
 					},
 				],
 			});
