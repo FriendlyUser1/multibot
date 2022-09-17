@@ -31,5 +31,8 @@
 		"mongodb": "^4.9.1",
 		"neko-love": "^2.0.2",
 		"request": "^2.88.2"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.20"
 	}
 }
