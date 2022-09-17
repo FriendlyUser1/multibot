@@ -55,12 +55,14 @@ module.exports = {
 			`mongodb+srv://${process.env.MONGOUSER}:${process.env.MONGOPASS}@multibot.x4ns9q3.mongodb.net/?retryWrites=true&w=majority`,
 			{
 				useNewUrlParser: true,
-				useUnifiedTopology: true,
+				useUnifiedTopology: false,
 				serverApi: ServerApiVersion.v1,
 			}
 		);
 
 		mongoclient.connect(async (err) => {
+			if (err) console.log(err);
+
 			const collection = mongoclient.db("multibot").collection("welcomeroles");
 			await collection.updateOne(
 				{ serverid: interaction.guild.id },
@@ -73,6 +75,7 @@ module.exports = {
 				},
 				{ upsert: true }
 			);
+
 			mongoclient.close();
 		});
 
