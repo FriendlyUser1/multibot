@@ -1,30 +1,24 @@
-const { ApplicationCommandOptionType } = require("discord.js");
-module.exports = {
-	name: "sarcastic",
-	description: "Makes your message sArCaStIc",
-	options: [
-		{
-			name: "text",
-			type: ApplicationCommandOptionType.String,
-			description: "The text to be made sArCaStIc",
-			required: true,
-		},
-	],
-	run: async (client, interaction, args) => {
-		let s = interaction.options.getString("text").split(""),
-			newS = "";
-		for (let i = 0; i < s.length; i++) {
-			newS += i % 2 === 0 ? s[i].toLowerCase() : s[i].toUpperCase();
-		}
+const { SlashCommandBuilder } = require("discord.js");
 
-		return interaction.followUp({
-			embeds: [
-				{
-					color: require("../../ranCol").lightCol(),
-					timestamp: new Date().toISOString(),
-					description: newS,
-				},
-			],
-		});
+module.exports = {
+	data: new SlashCommandBuilder()
+		.setName("sarcastic")
+		.setDescription("Makes your message sArCaStIc")
+		.addStringOption((o) =>
+			o
+				.setName("text")
+				.setDescription("The text to be made sArCaStIc")
+				.setMaxLength(1000)
+				.setRequired(true)
+		),
+
+	async execute(interaction) {
+		let strOp = interaction.options.getString("text").split(""),
+			str = "";
+
+		for (let i = 0; i < strOp.length; i++)
+			str += i % 2 === 0 ? strOp[i].toLowerCase() : strOp[i].toUpperCase();
+
+		interaction.reply(str);
 	},
 };

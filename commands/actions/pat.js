@@ -1,65 +1,35 @@
-const Neko = require("neko-love");
-const nekoclient = new Neko.Client();
-const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
+const ainasepics = require("ainasepics");
+const { SlashCommandBuilder } = require("discord.js");
+const { makeAction } = require("../../actionsHandler");
+
 module.exports = {
-	name: "pat",
-	description: "Pat someone :)",
-	options: [
-		{
-			name: "user",
-			type: ApplicationCommandOptionType.User,
-			description: "The user you want to pat",
-			required: false,
-		},
-		{
-			name: "text",
-			type: ApplicationCommandOptionType.String,
-			description: "The... text string you want to pat? (Don't use with user)",
-			required: false,
-		},
-	],
-	run: async (client, interaction, args) => {
-		var patembed = new EmbedBuilder()
-			.setTimestamp()
-			.setColor(require("../../ranCol").lightCol());
+	data: new SlashCommandBuilder()
+		.setName("pat")
+		.setDescription("Pat someone :)")
+		.addUserOption((o) =>
+			o.setName("user").setDescription("The user you want to pat")
+		)
+		.addStringOption((o) =>
+			o
+				.setName("text")
+				.setDescription("The... text string you want to pat?")
+				.setMaxLength(100)
+		),
 
-		if (interaction.options.get("user")) {
-			if (interaction.options.get("user").user == interaction.user) {
-				patembed.setTitle(
-					`${interaction.member.displayName} just patted themselves...`
-				);
-			} else {
-				patembed.setTitle(
-					`${interaction.member.displayName} just patted ${
-						interaction.options.get("user").member.displayName
-					} :)`
-				);
-			}
-		} else if (interaction.options.getString("text")) {
-			patembed.setTitle(
-				`${
-					interaction.member.displayName
-				} just patted ${interaction.options.getString("text")}`
-			);
-		} else {
-			patembed.setTitle(`${interaction.member.displayName} just patted air :(`);
-		}
+	async execute(interaction, errorembed) {
+		let patembed = makeAction(interaction, "patted", ":)");
 
-		nekoclient
-			.pat()
-			.then((url) => {
-				patembed.setImage(url);
-				return interaction.followUp({ embeds: [patembed] });
+		ainasepics
+			.get("pat")
+			.then((res) => {
+				patembed.setImage(res.url);
+				interaction.reply({ embeds: [patembed] });
 			})
 			.catch((err) => {
-				console.log(err);
-				return interaction.followUp({
-					embeds: [
-						{
-							color: 13584458,
-							description: "Whoops! There was an error.",
-						},
-					],
+				console.error(err);
+				interaction.reply({
+					embeds: [errorembed],
+					ephemeral: true,
 				});
 			});
 	},

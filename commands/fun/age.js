@@ -1,55 +1,50 @@
-const request = require("request");
-const { ApplicationCommandOptionType } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
+
 module.exports = {
-	name: "ageguess",
-	description: "I will try to guess your age from your name!",
-	options: [
-		{
-			name: "name",
-			type: ApplicationCommandOptionType.String,
-			description: "The name of the person you want to find the age of",
-			required: true,
-		},
-	],
-	run: async (client, interaction, args) => {
-		request(
-			`https://api.agify.io/?name=${interaction.options
-				.getString("name")
-				.split(" ")
-				.join("%20")}`,
-			{ json: true },
-			(err, res, body) => {
-				if (err) {
-					console.log(err);
-					return interaction.followUp({
-						embeds: [
-							{
-								color: 13584458,
-								description: "Whoops! There was an error.",
-							},
-						],
-					});
+	data: new SlashCommandBuilder()
+		.setName("ageguess")
+		.setDescription("I will try to guess your age from your name!")
+		.addStringOption((o) =>
+			o
+				.setName("name")
+				.setDescription("The name")
+				.setRequired(true)
+				.setMaxLength(100)
+		),
+
+	async execute(interaction, errorembed) {
+		let age = Math.floor(Math.random() * 100);
+
+		fetch(
+			`https://api.agify.io/?name=${encodeURI(
+				interaction.options.getString("name")
+			)}`
+		)
+			.then((res) => res.json())
+			.then((body) => {
+				if (body.age) {
+					age = body.age;
 				}
 
-				if (!body.age || body.age == null) {
-					var age = Math.floor(Math.random() * 100);
-				} else {
-					var age = body.age;
-				}
-
-				return interaction.followUp({
+				interaction.reply({
 					embeds: [
 						{
-							color: require("../../ranCol").lightCol(),
 							title: `My guess:`,
 							fields: [
 								{ name: `Name: ${body.name}`, value: `**Age: ${age}**` },
 							],
 							timestamp: new Date().toISOString(),
+							color: require("../../ranCol").lightCol(),
 						},
 					],
 				});
-			}
-		);
+			})
+			.catch((err) => {
+				console.error(err);
+				interaction.reply({
+					embeds: [errorembed],
+					ephemeral: true,
+				});
+			});
 	},
 };

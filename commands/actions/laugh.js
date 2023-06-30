@@ -2,16 +2,16 @@ const { SlashCommandBuilder } = require("discord.js");
 const ainasepics = require("ainasepics");
 
 module.exports = {
-	data: new SlashCommandBuilder().setName("cry").setDescription("Cry :("),
+	data: new SlashCommandBuilder().setName("laugh").setDescription("laugh :p"),
 
 	async execute(interaction, errorembed) {
 		ainasepics
-			.get("cry")
+			.get("laugh")
 			.then((res) => {
 				interaction.reply({
 					embeds: [
 						{
-							title: ":(",
+							title: ":p",
 							color: require("../../ranCol").lightCol(),
 							image: { url: res.url },
 							timestamp: new Date().toISOString(),

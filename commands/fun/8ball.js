@@ -1,17 +1,19 @@
-const { ApplicationCommandOptionType } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
+
 module.exports = {
-	name: "8ball",
-	description: "Gain the wisdom of the mighty 8 ball",
-	options: [
-		{
-			name: "question",
-			type: ApplicationCommandOptionType.String,
-			description: "What you want to ask the 8ball",
-			required: true,
-		},
-	],
-	run: async (client, interaction, args) => {
-		var responses = [
+	data: new SlashCommandBuilder()
+		.setName("8ball")
+		.setDescription("Gain the wisdom of the mighty 8 ball")
+		.addStringOption((o) =>
+			o
+				.setName("question")
+				.setDescription("The question to ask the 8ball")
+				.setRequired(true)
+				.setMaxLength(250)
+		),
+
+	async execute(interaction) {
+		const responses = [
 			// affirmative
 			"It is certain",
 			"It is decidedly so",
@@ -35,9 +37,12 @@ module.exports = {
 			"My sources say no",
 			"Outlook not so good",
 			"Very doubtful",
+			"No",
+			"Most likely not",
+			"It is impossible",
 		];
 
-		return interaction.followUp({
+		interaction.reply({
 			embeds: [
 				{
 					color: require("../../ranCol").lightCol(),

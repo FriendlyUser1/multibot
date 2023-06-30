@@ -3,8 +3,8 @@ const { makeConverter } = require("../../conversionHandler");
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName("base64")
-		.setDescription("Converts between text and base64")
+		.setName("hex")
+		.setDescription("Converts between text and hexadecimal")
 		.addStringOption((o) =>
 			o
 				.setName("process")
@@ -27,11 +27,11 @@ module.exports = {
 		interaction.reply({
 			embeds: [
 				makeConverter(
-					"Base64",
+					"Hexadecimal",
 					interaction.options.getString("process"),
 					interaction.options.getString("message"),
-					(s) => Buffer.from(s).toString("base64"),
-					(s) => Buffer.from(s, "base64").toString()
+					(s) => Buffer.from(s).toString("hex"),
+					(s) => Buffer.from(s, "hex").toString()
 				),
 			],
 		});

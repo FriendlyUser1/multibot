@@ -1,24 +1,27 @@
-const { ApplicationCommandOptionType } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
+
 module.exports = {
-	name: "reverse",
-	description: "reverses a message",
-	options: [
-		{
-			name: "message",
-			type: ApplicationCommandOptionType.String,
-			description: "The string you want to be reversed",
-			required: true,
-		},
-	],
-	run: async (client, interaction, args) => {
-		var splitString = interaction.options.getString("message").split("");
-		var reverseArray = splitString.reverse();
-		var joinArray = reverseArray.join("");
-		interaction.followUp({
+	data: new SlashCommandBuilder()
+		.setName("reverse")
+		.setDescription("Reverse a string")
+		.addStringOption((o) =>
+			o
+				.setName("message")
+				.setDescription("The message")
+				.setRequired(true)
+				.setMaxLength(1000)
+		),
+
+	async execute(interaction) {
+		interaction.reply({
 			embeds: [
 				{
 					title: "Reversed message:",
-					description: joinArray,
+					description: interaction.options
+						.getString("message")
+						.split("")
+						.reverse()
+						.join(""),
 					timestamp: new Date().toISOString(),
 					color: require("../../ranCol").lightCol(),
 				},

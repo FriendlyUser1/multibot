@@ -1,14 +1,14 @@
 {
 	"name": "multibot",
 	"version": "1.0.0",
-	"description": "A multifunctional discordbot with fun, moderation, and info commands.\r Has a customisable prefix and takes suggestions - use $suggest!",
+	"description": "A multifunctional discord bot with many commands!",
 	"main": "index.js",
 	"scripts": {
 		"start": "node index.js"
 	},
 	"engines": {
-		"npm": ">=7.0.0",
-		"node": ">=16.9.0"
+		"npm": ">=9.5.1",
+		"node": ">=18.16.1"
 	},
 	"repository": {
 		"type": "git",
@@ -23,16 +23,8 @@
 	"homepage": "https://github.com/FriendlyUser1/multibot#readme",
 	"dependencies": {
 		"ainasepics": "^4.1.0",
-		"discord-image-generation": "^1.4.13",
-		"discord-jokes": "^4.0.0",
-		"discord.js": "^14.3.0",
-		"dotenv": "^16.0.1",
-		"fs": "^0.0.1-security",
-		"mongodb": "^4.9.1",
-		"neko-love": "^2.0.2",
-		"request": "^2.88.2"
-	},
-	"devDependencies": {
-		"nodemon": "^2.0.20"
+		"discord-image-generation": "^1.4.25",
+		"discord.js": "^14.11.0",
+		"dotenv": "^16.0.1"
 	}
 }

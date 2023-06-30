@@ -1,15 +1,10 @@
+const { SlashCommandBuilder } = require("discord.js");
+
 module.exports = {
-	name: "ping",
-	description: "Replies with 'Pong!'",
-	run: async (client, interaction, args) => {
-		return interaction.followUp({
-			embeds: [
-				{
-					color: 9757884,
-					description: `**Pong - ${client.ws.ping}**ms!`,
-					timestamp: new Date().toISOString(),
-				},
-			],
-		});
+	data: new SlashCommandBuilder()
+		.setName("ping")
+		.setDescription("Replies with 'pong'"),
+	async execute(interaction) {
+		await interaction.reply(`Pong! \`${interaction.client.ws.ping}ms\``);
 	},
 };

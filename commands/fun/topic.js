@@ -1,39 +1,25 @@
-const request = require("request");
+const { SlashCommandBuilder } = require("discord.js");
+
 module.exports = {
-	name: "topic",
-	description: "Gives a random conversation starter/topic",
-	run: async (client, interaction, args) => {
-		request(
-			`https://friendlyuser1.github.io/apis/randomtopic/randomtopic.json`,
-			{ json: true },
-			(err, res, body) => {
-				if (err) {
-					console.log(err);
-					return interaction.followUp({
-						embeds: [
-							{
-								color: 13584458,
-								description: "Whoops! There was an error.",
-							},
-						],
-					});
-				}
+	data: new SlashCommandBuilder()
+		.setName("topic")
+		.setDescription("Get a random conversation starter/topic"),
 
-				var foundTopic = "";
-
-				foundTopic =
+	async execute(interaction, errorembed) {
+		fetch(`https://friendlyuser1.github.io/apis/randomtopic/randomtopic.json`)
+			.then((res) => res.json())
+			.then((body) => {
+				let foundTopic =
 					body.topics[Math.floor(Math.random() * body.topics.length)];
 
-				return interaction.followUp({
-					embeds: [
-						{
-							color: require("../../ranCol").lightCol(),
-							timestamp: new Date().toISOString(),
-							description: foundTopic,
-						},
-					],
+				interaction.reply(foundTopic);
+			})
+			.catch((err) => {
+				console.error(err);
+				interaction.reply({
+					embeds: [errorembed],
+					ephemeral: true,
 				});
-			}
-		);
+			});
 	},
 };

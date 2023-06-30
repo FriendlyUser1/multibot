@@ -1,22 +1,16 @@
-const request = require("request");
-const fs = require("fs");
+const fs = require("node:fs");
+const { SlashCommandBuilder } = require("discord.js");
+
 module.exports = {
-	name: "doesnotexist",
-	description: "Gets an AI generated image of a person who doesn't exist",
-	run: async (client, interaction, args) => {
+	data: new SlashCommandBuilder()
+		.setName("doesnotexist")
+		.setDescription("Gets an AI generated image of a person who doesn't exist"),
+
+	async execute(interaction, errorembed) {
 		try {
-			const download = (url, path, callback) => {
-				request.head(url, (err, res, body) => {
-					request(url).pipe(fs.createWriteStream(path)).on("close", callback);
-				});
-			};
+			const path = "./tmp/doesnotexist.png";
 
-			const url = "https://thispersondoesnotexist.com/image";
-			const path = "./tempimgs/doesnotexist.png";
-
-			download(url, path, () => {});
-
-			return interaction.followUp({
+			interaction.reply({
 				embeds: [
 					{
 						timestamp: new Date().toISOString(),
@@ -27,20 +21,20 @@ module.exports = {
 				],
 				files: [
 					{
-						attachment: "./tempimgs/doesnotexist.png",
+						attachment: path,
 						name: "doesnotexist.png",
 					},
 				],
 			});
+
+			fetch("https://thispersondoesnotexist.com/").then((res) =>
+				fs.promises.writeFile(path, res.body)
+			);
 		} catch (err) {
-			console.log(err);
-			return interaction.followUp({
-				embeds: [
-					{
-						color: 13584458,
-						description: "Whoops! There was an error.",
-					},
-				],
+			console.error(err);
+			interaction.reply({
+				embeds: [errorembed],
+				ephemeral: true,
 			});
 		}
 	},

@@ -1,76 +1,49 @@
-const { ApplicationCommandOptionType } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
+
 module.exports = {
-	name: "roll",
-	description: "Rolls a dice",
-	options: [
-		{
-			name: "sides",
-			type: ApplicationCommandOptionType.Integer,
-			description: "How many sides the dice has (default: 6)",
-			required: false,
-		},
-		{
-			name: "rolls",
-			type: ApplicationCommandOptionType.Integer,
-			description: "How many times you want to roll the dice (max: 10)",
-			required: false,
-		},
-	],
-	run: async (client, interaction, args) => {
-		var sides = interaction.options.getInteger("sides")
-				? interaction.options.getInteger("sides")
-				: 6,
-			rolls = interaction.options.getInteger("rolls")
-				? interaction.options.getInteger("rolls")
-				: 1,
-			results;
+	data: new SlashCommandBuilder()
+		.setName("roll")
+		.setDescription("Roll dice")
+		.addIntegerOption((o) =>
+			o
+				.setName("sides")
+				.setDescription("How many sides the die has: default is 6")
+				.setMaxValue(9999)
+				.setMinValue(2)
+		)
+		.addIntegerOption((o) =>
+			o
+				.setName("rolls")
+				.setDescription("How many times to roll the die: default is 1")
+				.setMaxValue(10)
+				.setMinValue(1)
+		),
 
-		if (rolls > 10 || rolls < 1) {
-			return interaction.followUp({
-				embeds: [
-					{
-						color: 13584458,
-						description: "You can only roll 0-10 times at once!",
-						timestamp: new Date().toISOString(),
-					},
-				],
-			});
-		}
+	async execute(interaction, errorembed) {
+		const sides = interaction.options.getInteger("sides") ?? 6,
+			rolls = interaction.options.getInteger("rolls") ?? 1;
 
-		if (rolls > 1) {
-			var rollsArr = [];
-			for (var i = 0; i < rolls; i++) {
-				rollsArr.push(1 + Math.floor(Math.random() * sides));
-			}
+		let results = [];
 
-			results = rollsArr.join(", ");
-		} else {
-			results = 1 + Math.floor(Math.random() * sides);
-		}
+		for (let i = 0; i < rolls; i++)
+			results.push(1 + Math.floor(Math.random() * sides));
 
 		try {
-			interaction.followUp({
+			interaction.reply({
 				embeds: [
 					{
 						color: require("../../ranCol").lightCol(),
-						description: results.toString(),
+						description: results.join(", "),
 						timestamp: new Date().toISOString(),
 					},
 				],
 			});
-		} catch {
-			(err) => {
-				console.log(err);
-				interaction.followUp({
-					embeds: [
-						{
-							color: 13584458,
-							description: "Whoops! There was an error.",
-							timestamp: new Date().toISOString(),
-						},
-					],
-				});
-			};
+		} catch (err) {
+			console.error(err);
+			interaction.reply({
+				embeds: [errorembed],
+				ephemeral: true,
+			});
 		}
 	},
 };

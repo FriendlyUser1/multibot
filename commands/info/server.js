@@ -1,8 +1,12 @@
+const { SlashCommandBuilder } = require("discord.js");
+
 module.exports = {
-	name: "server",
-	description: "An invite to the support server",
-	run: async (client, interaction, args) => {
-		return interaction.followUp({
+	data: new SlashCommandBuilder()
+		.setName("server")
+		.setDescription("Join the multibot support server!"),
+
+	async execute(interaction) {
+		interaction.reply({
 			embeds: [
 				{
 					color: 9757884,
@@ -12,6 +16,7 @@ module.exports = {
 					timestamp: new Date().toISOString(),
 				},
 			],
+			ephemeral: true,
 		});
 	},
 };

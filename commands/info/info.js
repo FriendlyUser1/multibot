@@ -1,25 +1,19 @@
-const { readdirSync } = require("fs");
+const { SlashCommandBuilder } = require("discord.js");
+
 module.exports = {
-	name: "info",
-	description: "Information about multibot",
-	run: async (client, interaction, args) => {
-		var commands = [];
-		readdirSync("./commands/").forEach((dir) => {
-			var dircmds = readdirSync(`./commands/${dir}/`).filter((file) =>
-				file.endsWith(".js")
-			);
+	data: new SlashCommandBuilder()
+		.setName("info")
+		.setDescription("Information about multibot"),
 
-			commands = commands.concat(dircmds);
-		});
-
-		return interaction.followUp({
+	async execute(interaction) {
+		interaction.reply({
 			embeds: [
 				{
 					description: `
 Hi! I'm multibot, nice to meet you.
-I was created by Chihiro Fujisaki#0449
+I was created by chihirofujisaki0449
 with the \`discord.js v14\` library
-and currently I have ${commands.length} commands.
+and currently I have ${interaction.client.commands.size} commands.
 `,
 					title: "About me :)",
 					color: require("../../ranCol").lightCol(),
